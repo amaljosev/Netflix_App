@@ -10,7 +10,7 @@ class BodyDownloads extends StatelessWidget {
   final List<String> imageList = [
     "https://www.themoviedb.org/t/p/w220_and_h330_face/eyWICPcxOuTcDDDbTMOZawoOn8d.jpg",
     "https://www.themoviedb.org/t/p/w300_and_h450_bestv2/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-    "https://www.themoviedb.org/t/p/w220_and_h330_face/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg",
+    "https://www.themoviedb.org/t/p/w220_and_h330_face/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg",  
   ];
 
   @override
@@ -95,7 +95,7 @@ class BodyDownloads extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20), 
+                    padding: const EdgeInsets.symmetric(vertical: 20),  
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
