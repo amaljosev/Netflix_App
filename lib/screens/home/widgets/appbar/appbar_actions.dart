@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:netflix/screens/search/screen_search.dart';
 import '../../../../core/colors/common_colors.dart';
 
-AppBar newMethod(String logo) {
+AppBar appBar(String logo,context) {
     return AppBar(
         backgroundColor: Colors.black87, 
         actions: [
@@ -20,7 +22,9 @@ AppBar newMethod(String logo) {
             ),
           ),
           const Spacer(),
-          const Icon(Icons.search),
+           IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenSearch(),),); 
+           }, icon: const Icon(CupertinoIcons.search)), 
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(

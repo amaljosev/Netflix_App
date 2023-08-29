@@ -18,44 +18,54 @@ class ScreenHome extends StatefulWidget {
 }
 
 class _ScreenHomeState extends State<ScreenHome> {
+  @override
+  void initState() {
+    loadMovies();
+    super.initState();
+  }
 
+  List trendingMovies = [];
+  List topRatedMovies = [];
+  List tv = [];
 
-List trendingMovies = [];
-    static const String apiKey = 'e6227c69efda2538922e54d7b2abadcf';
-    static const readAccessToken =
-        'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNjIyN2M2OWVmZGEyNTM4OTIyZTU0ZDdiMmFiYWRjZiIsInN1YiI6IjY0ZWNhMWE3ZTg5NGE2MDBlNGU3YzU0NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ESjN0I4CS8rXzgIPLUcVc7np9shcUHxu392Gnf4bMes';
-    final imageList = [
-      "https://www.themoviedb.org/t/p/w220_and_h330_face/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-      "https://www.themoviedb.org/t/p/w220_and_h330_face/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
-      "https://www.themoviedb.org/t/p/w220_and_h330_face/37p95Lpe7mfVX86ZcVr7TisAHPn.jpg",
-      "https://www.themoviedb.org/t/p/w220_and_h330_face/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-      "https://www.themoviedb.org/t/p/w220_and_h330_face/8riWcADI1ekEiBguVB9vkilhiQm.jpg",
-    ];
-    static const mainImage = 
-        "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hUJ0UvQ5tgE2Z9WpfuduVSdiCiU.jpg";
-    static const logo =
-        "https://i.insider.com/576837b852bcd01a008ca3bf?width=750&format=jpeg&auto=webp";
+  static const String apiKey = 'e6227c69efda2538922e54d7b2abadcf';
+  static const readAccessToken =
+      'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNjIyN2M2OWVmZGEyNTM4OTIyZTU0ZDdiMmFiYWRjZiIsInN1YiI6IjY0ZWNhMWE3ZTg5NGE2MDBlNGU3YzU0NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ESjN0I4CS8rXzgIPLUcVc7np9shcUHxu392Gnf4bMes';
 
-    loadMovies() async {
-      TMDB tmdbWithCoustomLogs = TMDB(
-        ApiKeys(apiKey, readAccessToken),
-        logConfig: ConfigLogger(
-          showLogs: true,
-          showErrorLogs: true,
-        ),
-      );
-      Map trendingResult=await tmdbWithCoustomLogs.v3.trending.getTrending(); 
-    }
+  static const mainImage =
+      "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hUJ0UvQ5tgE2Z9WpfuduVSdiCiU.jpg";
+  static const logo =
+      "https://i.insider.com/576837b852bcd01a008ca3bf?width=750&format=jpeg&auto=webp";
+
+  loadMovies() async {
+    TMDB tmdbWithCoustomLogs = TMDB(
+      ApiKeys(apiKey, readAccessToken),
+      logConfig: const ConfigLogger(
+        showLogs: true,
+        showErrorLogs: true,
+      ),
+    );
+
+    Map trendingResult = await tmdbWithCoustomLogs.v3.trending.getTrending();
+    Map topRatedResults = await tmdbWithCoustomLogs.v3.movies.getTopRated(); 
+    Map tvResults = await tmdbWithCoustomLogs.v3.tv.getPopular();
+
+    setState(() {
+      trendingMovies = trendingResult['results'];  
+
+      topRatedMovies = topRatedResults['results'];
+
+      tv = tvResults['results'];
+    });
+  }
+  
 
   @override
   Widget build(BuildContext context) {
-    
-    
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: scaffoldColor,
-        appBar: newMethod(logo),
+        appBar: appBar(logo,context),
         extendBodyBehindAppBar: true,
         body: ValueListenableBuilder(
           valueListenable: scrollNotifier,
@@ -78,19 +88,33 @@ List trendingMovies = [];
                         const EdgeInsets.only(left: 15, right: 15, top: 30),
                     child: ListView(
                       children: [
-                        const MainCardWidget(mainImage: mainImage),
+                        MainCardWidget(mainImage: mainImage),
                         MainTileCard(
-                            title: "Released in the Past Year",
-                            image: imageList[0]),
+                          title: "Released in the Past Year",
+                          movieList: trendingMovies, 
+                          getPosterPath:  (movie) => movie['poster_path'] ?? '',   
+                        ),
                         MainTileCard(
-                            title: "Trending Now", image: imageList[1]),
-                        const NumberTitileCard(),
+                          title: "Trending Now",
+                          movieList: trendingMovies, 
+                          getPosterPath:  (movie) => movie['poster_path'] ?? '', 
+                        ),
+                         NumberTitileCard(movieList:topRatedMovies,getPosterPath:(movie) => movie['poster_path'] ?? '',   ),
                         MainTileCard(
-                            title: "Watch for a while", image: imageList[2]),
+                          title: "Watch for a while",
+                          movieList: trendingMovies, 
+                          getPosterPath:  (movie) => movie['poster_path'] ?? '', 
+                        ),
                         MainTileCard(
-                            title: "Only on Netflix", image: imageList[3]),
+                          title: "Only on Netflix",
+                          movieList: trendingMovies, 
+                          getPosterPath:  (movie) => movie['poster_path'] ?? '', 
+                        ),
                         MainTileCard(
-                            title: "Recently Released", image: imageList[4]),
+                          title: "Recently Released",
+                          movieList: trendingMovies, 
+                          getPosterPath:  (movie) => movie['poster_path'] ?? '',  
+                        ),
                       ],
                     ),
                   ),

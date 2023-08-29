@@ -2,13 +2,15 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix/core/colors/common_colors.dart';
 
+import '../../../core/api.dart';
+
 class NumberCard extends StatelessWidget {
-  const NumberCard({super.key, required this.index});
-  final int index;
+  const NumberCard({super.key, required this.index,required this.posterPath});
+  final  index;
+  final posterPath;
   @override
   Widget build(BuildContext context) {
-    const image =
-        "https://www.themoviedb.org/t/p/w220_and_h330_face/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg";
+
     return Stack(
       children: [
         Positioned( 
@@ -41,7 +43,7 @@ class NumberCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(5)),  
                 child: Image.network(
-                  image,
+                  address+posterPath, 
                   fit: BoxFit.cover, 
                 ),
               ),
