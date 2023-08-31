@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:netflix/api/api.dart';
+import 'package:netflix/models/tv.dart';
 import 'package:netflix/screens/home/widgets/appbar/sub_appbar_widget.dart';
-import 'package:netflix/screens/home/widgets/main_card_widget.dart';
-import 'package:netflix/screens/home/widgets/maintile_widget.dart';
-import 'package:netflix/screens/home/widgets/numbertitlecard.dart';
-import 'package:tmdb_api/tmdb_api.dart';
-import '../../core/api.dart';
+import 'package:netflix/screens/home/widgets/categories/movie/main_card_widget.dart';
+import 'package:netflix/screens/home/widgets/categories/movie/maintile_widget.dart';
+import 'package:netflix/screens/home/widgets/categories/number/numbertitlecard.dart';
+import 'package:netflix/screens/home/widgets/categories/series/maintile_series.dart';
 import '../../core/colors/common_colors.dart';
+import '../../models/movie.dart';
 import 'widgets/appbar/appbar_actions.dart';
 
 ValueNotifier<bool> scrollNotifier = ValueNotifier(true);
@@ -19,47 +21,22 @@ class ScreenHome extends StatefulWidget {
 }
 
 class _ScreenHomeState extends State<ScreenHome> {
+  late Future<List<Movie>> trendingMovies;
+  late Future<List<Movie>> topRatedMovies;
+  late Future<List<Movie>> upComingMovies;
+  late Future<List<TvSeries>> topRatedSeries;
+
   @override
   void initState() {
-    loadMovies();
     super.initState();
+    trendingMovies = Api().getTrendingMovies();
+    topRatedMovies = Api().getTopRatedMovies();
+    upComingMovies = Api().getUpcomingMovies();
+    topRatedSeries = Api().getTopRatedSeries();
   }
-
-  List upcomingMovies = [];
-  List trendingMovies = [];
-  List topRatedMovies = [];
-  List tv = [];
-  List popularMovies = [];
 
   static const logo =
       "https://i.insider.com/576837b852bcd01a008ca3bf?width=750&format=jpeg&auto=webp";
-
-  loadMovies() async {
-    TMDB tmdbWithCoustomLogs = TMDB(
-      ApiKeys(apiKey, readAccessToken),
-      logConfig: const ConfigLogger(
-        showLogs: true,
-        showErrorLogs: true,
-      ),
-    );
-
-    Map trendingResult = await tmdbWithCoustomLogs.v3.trending.getTrending();
-    Map topRatedResults = await tmdbWithCoustomLogs.v3.movies.getTopRated();
-    Map tvResults = await tmdbWithCoustomLogs.v3.tv.getPopular();
-    Map upcoming = await tmdbWithCoustomLogs.v3.movies.getUpcoming();
-    Map popular = await tmdbWithCoustomLogs.v3.movies.getPopular();
-
-    setState(
-      () {
-        trendingMovies = trendingResult['results'];
-        upcomingMovies = upcoming['results'];
-        topRatedMovies = topRatedResults['results'];
-        tv = tvResults['results'];
-        popularMovies = popular['results'];
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -83,44 +60,113 @@ class _ScreenHomeState extends State<ScreenHome> {
               },
               child: Stack(
                 children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, top: 30),
-                    child: ListView(
-                      children: [
-                        MainCardWidget(
-                          movieList: trendingMovies,
-                          getPosterPath: (movie) => movie['poster_path'] ?? '',
+                  ListView(
+                    padding: const EdgeInsets.all(20),
+                    children: [
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: trendingMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return MainCardWidget(
+                                snapshot: snapshot,
+                              );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
                         ),
-                        MainTileCard(
-                          title: "Trending Now",
-                          movieList: trendingMovies,
-                          getPosterPath: (movie) => movie['poster_path'] ?? '',
+                      ),
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: trendingMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return MainTileCard(
+                                title: "Trending Now",
+                                snapshot: snapshot,
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
                         ),
-                        MainTileCard(
-                          title: "Top TV Shows",
-                          movieList: tv,
-                          getPosterPath: (movie) => movie['poster_path'] ?? '',
+                      ),
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: topRatedMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return NumberTitileCard(
+                                text: 'Top Rated Movies',
+                                snapshot: snapshot,
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
                         ),
-                        NumberTitileCard(
-                          movieList: topRatedMovies,
-                          text: 'Top Rated Movies',
-                          getPosterPath: (movie) => movie['poster_path'] ?? '',
+                      ),
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: upComingMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return MainTileCard(
+                                title: "Upcoming Movies",
+                                snapshot: snapshot,
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
                         ),
-                        MainTileCard(
-                          title: "Upcoming Movies",
-                          movieList: upcomingMovies,
-                          getPosterPath: (movie) => movie['poster_path'] ?? '',
+                      ),
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: topRatedSeries,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return MainTileCardSeries(
+                                title: "Top Rated TV Series",
+                                snapshot: snapshot,
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
                         ),
-                        MainTileCard(
-                          title: "Popular Movies",
-                          movieList: popularMovies,
-                          getPosterPath: (movie) => movie['poster_path'] ?? '',
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SubAppbarWidget(),
+                   // ignore: prefer_const_constructors
+                   SubAppbarWidget(),
                 ],
               ),
             );
