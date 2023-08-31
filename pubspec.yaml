@@ -39,6 +39,7 @@ dependencies:
   bordered_text: ^2.0.0
   tmdb_api: ^2.1.5
   http: ^1.1.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

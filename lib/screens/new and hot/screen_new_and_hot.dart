@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:netflix/screens/new%20and%20hot/widgets/comingsoon_tab.dart';
 import 'package:netflix/screens/new%20and%20hot/widgets/everyones_watching_widget.dart';
+import '../../api/api.dart';
 import '../../core/colors/common_colors.dart';
+import '../../models/movie.dart';
 
 const newAndHotTempImage =
     "https://i.ytimg.com/vi/nfe7SHu4kcE/maxresdefault.jpg";
@@ -14,8 +16,16 @@ class ScreenNewAndHot extends StatefulWidget {
   @override
   State<ScreenNewAndHot> createState() => _ScreenNewAndHotState();
 }
-List upcomingMovies = [];
+
+late Future<List<Movie>> trendingMovies;
+
 class _ScreenNewAndHotState extends State<ScreenNewAndHot> {
+  @override
+  void initState() {
+    super.initState(); 
+    trendingMovies = Api().getTrendingMovies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -77,17 +87,35 @@ class _ScreenNewAndHotState extends State<ScreenNewAndHot> {
               ),
             ),
             body: TabBarView(children: [
-              buildTabbarViewOne(),
+              SizedBox(
+                        child: FutureBuilder(
+                          future: trendingMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return  buildTabbarViewOne(snapshot); 
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+             
               buildTabbarViewTwo(context),
             ])),
       ),
     );
   }
 
-  Widget buildTabbarViewOne() {
+  Widget buildTabbarViewOne(AsyncSnapshot<List<Movie>> snapshot) { 
     return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) => const ComingSoonWidget(),
+      itemCount: snapshot.data!.length, 
+      itemBuilder: (context, index) =>  ComingSoonWidget(snapshot: snapshot,index: index), 
     );
   }
 
@@ -98,3 +126,5 @@ class _ScreenNewAndHotState extends State<ScreenNewAndHot> {
     );
   }
 }
+
+List upcomingMovies = [];
