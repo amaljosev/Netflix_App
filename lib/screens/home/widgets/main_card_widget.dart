@@ -1,19 +1,25 @@
-
 import 'package:flutter/material.dart';
-
-import '../../../core/colors/common_colors.dart';
+import '../../../core/api.dart';
+import '../../../core/colors/common_colors.dart'; 
 
 class MainCardWidget extends StatelessWidget {
   const MainCardWidget({
     super.key,
-    required this.mainImage,
+    required this.movieList, required this.getPosterPath,
   });
 
-  final String mainImage;
+  final List movieList;
+  final String Function(dynamic) getPosterPath;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    if (movieList.isEmpty) {
+      return const SizedBox();
+    }
+    final movie = movieList[0];
+              final posterPath = getPosterPath(movie);
+    
+    return Padding( 
       padding: const EdgeInsets.all(18.0),
       child: Stack(
         children: [
@@ -22,12 +28,12 @@ class MainCardWidget extends StatelessWidget {
             height: 500,
             decoration: BoxDecoration(
               color: Colors.grey.shade900, 
-              borderRadius: const BorderRadius.all(
+              borderRadius: const BorderRadius.all( 
                 Radius.circular(10),
               ),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(mainImage),
+                image: NetworkImage(address+posterPath),      
               ),
             ),
           ),
@@ -84,7 +90,7 @@ class MainCardWidget extends StatelessWidget {
                 )
               ],
             ),
-          )
+          ),
         ],
       ),
     );

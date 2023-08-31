@@ -23,7 +23,7 @@ AppBar appBar(String logo,context) {
           ),
           const Spacer(),
            IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenSearch(),),); 
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ScreenSearch(),),); 
            }, icon: const Icon(CupertinoIcons.search)), 
           Padding(
             padding: const EdgeInsets.all(8.0),

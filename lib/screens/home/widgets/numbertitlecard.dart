@@ -8,7 +8,9 @@ class NumberTitileCard extends StatelessWidget {
     super.key,
     required this.movieList,
     required this.getPosterPath,
+    required this.text,
   });
+  final String text;
   final List<dynamic> movieList;
   final String Function(dynamic) getPosterPath;
 
@@ -17,19 +19,22 @@ class NumberTitileCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Top 10 TV Shows in India Today", style: homeTitleStyle),
+        Text(text, style: homeTitleStyle),
         LimitedBox(
-            maxHeight: 150,
-            child: ListView.builder(
-              
-              scrollDirection: Axis.horizontal,
+          maxHeight: 150,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
             itemCount: movieList.length,
             itemBuilder: (context, index) {
               final movie = movieList[index];
               final posterPath = getPosterPath(movie);
-              return NumberCard(index: index,posterPath: posterPath,); 
+              return NumberCard(
+                index: index,
+                posterPath: posterPath,
+              );
             },
-            ),),
+          ),
+        ),
       ],
     );
   }

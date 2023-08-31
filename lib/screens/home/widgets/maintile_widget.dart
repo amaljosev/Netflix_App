@@ -28,7 +28,7 @@ class MainTileCard extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 200,
+          height: 150, 
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: movieList.length,
@@ -42,10 +42,10 @@ class MainTileCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
                     address+posterPath, 
-                    width: 120,
-                    height: 180,
+                    width: 100,
+                    height: 150, 
                     fit: BoxFit.cover,
-                  ),
+                  ), 
                 ),
               );
             },

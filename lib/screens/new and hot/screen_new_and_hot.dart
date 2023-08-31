@@ -8,9 +8,14 @@ const newAndHotTempImage =
 const logo =
     "https://upload.wikimedia.org/wikipedia/en/1/1e/One_Piece_Live_Action_Logo.jpg";
 
-class ScreenNewAndHot extends StatelessWidget {
+class ScreenNewAndHot extends StatefulWidget {
   const ScreenNewAndHot({super.key});
 
+  @override
+  State<ScreenNewAndHot> createState() => _ScreenNewAndHotState();
+}
+List upcomingMovies = [];
+class _ScreenNewAndHotState extends State<ScreenNewAndHot> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

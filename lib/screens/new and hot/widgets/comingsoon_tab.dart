@@ -81,7 +81,7 @@ class ComingSoonWidget extends StatelessWidget {
                         height: 60,
                         child: Image.network(
                           logo,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.cover, 
                         ),
                       ),
                       const Spacer(),

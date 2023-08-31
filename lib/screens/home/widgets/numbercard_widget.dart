@@ -6,8 +6,8 @@ import '../../../core/api.dart';
 
 class NumberCard extends StatelessWidget {
   const NumberCard({super.key, required this.index,required this.posterPath});
-  final  index;
-  final posterPath;
+  final int  index;
+  final dynamic  posterPath; 
   @override
   Widget build(BuildContext context) {
 
