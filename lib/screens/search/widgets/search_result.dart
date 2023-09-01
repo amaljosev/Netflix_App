@@ -38,13 +38,21 @@ class MainCard extends StatelessWidget {
   const MainCard({super.key, required this.snapshot, required this.index});
   final AsyncSnapshot snapshot;
   final int index;
+
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(5)), 
-      child: Image.network(
-          '${Constants.imagePath}${snapshot.data![index].posterPath}', 
-          fit: BoxFit.cover),
-    );
+    if (snapshot.data != null && index >= 0 && index < snapshot.data.length) {
+      return ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        child: Image.network(
+          '${Constants.imagePath}${snapshot.data[index].posterPath}',
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+     
+      return const SizedBox();
+    }
   }
 }
+

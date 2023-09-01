@@ -6,8 +6,6 @@ import '../../api/api.dart';
 import '../../core/colors/common_colors.dart';
 import '../../models/movie.dart';
 
-
-
 TextEditingController searchController = TextEditingController();
 
 class ScreenSearch extends StatefulWidget {
@@ -19,15 +17,28 @@ class ScreenSearch extends StatefulWidget {
 
 class _ScreenSearchState extends State<ScreenSearch> {
   late Future<List<Movie>> popularMovies;
+  Future<List<Movie>> searchResults = Future.value([]);
   @override
   void initState() {
     super.initState();
     popularMovies = Api().getpopularMovies();
   }
+
   String searchContent = '';
+
+  void _performSearch(String value) async {
+    try {
+      final results = await Api().search(value);
+      setState(() {
+        searchResults = Future.value(results);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -46,10 +57,10 @@ class _ScreenSearchState extends State<ScreenSearch> {
                 ),
               ]),
           body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, 
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
-                style: const TextStyle(color: titleColor), 
+                style: const TextStyle(color: titleColor),
                 controller: searchController,
                 decoration: InputDecoration(
                     filled: true,
@@ -63,25 +74,30 @@ class _ScreenSearchState extends State<ScreenSearch> {
                     suffixIcon: const Icon(CupertinoIcons.mic),
                     suffixIconColor: textColor,
                     border: InputBorder.none),
-                onChanged: (value) => setState(() {
-                  searchContent = value;
-                }), 
+                onChanged: (value) {
+                  setState(() {
+                    searchContent = value;
+                  });
+                  if (value.isNotEmpty) {
+                    _performSearch(value);
+                  }
+                },
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                searchContent.isEmpty
-                    ?  'Top Searches':'Movies & TV',
+                  searchContent.isEmpty ? 'Top Searches' : 'Movies & TV',
                   style: const TextStyle(
                       color: titleColor,
                       fontSize: 22,
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              Expanded( 
+              Expanded(
                 child: SizedBox(
                   child: FutureBuilder(
-                    future: popularMovies, 
+                    future:
+                        searchContent.isEmpty ? popularMovies : searchResults,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(
@@ -89,9 +105,12 @@ class _ScreenSearchState extends State<ScreenSearch> {
                         );
                       } else if (snapshot.hasData) {
                         return searchContent.isEmpty
-                    ? SearchTile(
-                        snapshot: snapshot,)
-                    :   SearchResultWidget(snapshot: snapshot,);  
+                            ? SearchTile(
+                                snapshot: snapshot,
+                              )
+                            : SearchResultWidget(
+                                snapshot: snapshot,
+                              );
                       } else {
                         return const Center(
                           child: CircularProgressIndicator(),
@@ -101,8 +120,6 @@ class _ScreenSearchState extends State<ScreenSearch> {
                   ),
                 ),
               ),
-              
-              
             ],
           )),
     );

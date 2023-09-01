@@ -98,7 +98,7 @@ class Api {
     final response = await http.get(Uri.parse(searchsUrl));
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body)['results'] as List;
-      return decodedData.map((movie) => Movie.fromJson(movie)).toList();  
+      return decodedData.map((movie) => Movie.fromJson(movie)).toList(); 
     } else {
       throw Exception('Something Happend');
     }
