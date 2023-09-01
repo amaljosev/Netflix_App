@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-
+import '../../../constants/constants.dart';
 import '../../../core/colors/common_colors.dart';
 import '../../../core/font.dart';
-import '../screen_new_and_hot.dart';
 
 class EveryonesWatchingWidget extends StatelessWidget {
   const EveryonesWatchingWidget({
     super.key,
+    required this.snapshot,
+    required this.index,
   });
-
+  final AsyncSnapshot snapshot;
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: SizedBox(
         width: double.infinity,
-        height: 400,
         child: Column(
           children: [
             Stack(
@@ -23,9 +24,13 @@ class EveryonesWatchingWidget extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   height: 200,
-                  child: Image.network(
-                    newAndHotTempImage,
-                    fit: BoxFit.fill,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    child: Image.network(
+                      '${Constants.imagePath}${snapshot.data![index].backdropPath}',
+                      filterQuality: FilterQuality.high,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -79,9 +84,16 @@ class EveryonesWatchingWidget extends StatelessWidget {
                   SizedBox(
                     width: 180,
                     height: 60,
-                    child: Image.network(
-                      logo,
-                      fit: BoxFit.cover,
+                    child: Padding( 
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '${snapshot.data![index].title}',
+                        style: const TextStyle(
+                            color: titleColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400),
+                            maxLines: 1,    
+                      ),
                     ),
                   ),
                   const Spacer(),
@@ -136,20 +148,15 @@ class EveryonesWatchingWidget extends StatelessWidget {
                 ],
               ),
             ),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Watch the Season Finale now", style: titleTextStyle),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    "With his straw hat and regtag crew, young pirateMonkey D. Luffy goes on an epic voyage for tresure in this live-action adaptation of the popular manga",
-                    style: contentTextStyle,
-                  ),
-                ),
+                const Text("Watch the Season Finale now",
+                    style: titleTextStyle),
                 Text(
-                    "Rousing • Adventure • Visually Striking • Pirates • Manga",
-                    style: contentTextStyle),
+                  '${snapshot.data![index].overview}',
+                  style: contentTextStyle,
+                ),
               ],
             )
           ],

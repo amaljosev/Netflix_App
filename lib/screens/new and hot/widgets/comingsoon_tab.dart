@@ -17,7 +17,8 @@ class ComingSoonWidget extends StatelessWidget {
     String date = '${snapshot.data![index].releaseDate}';
     List<String> dateParts = date.split('-');
     final DateTime dateSplit = DateTime.parse(date);
-   final month= DateFormat('MMMM').format(dateSplit);
+    final month = DateFormat('MMM').format(dateSplit);
+    final day = DateFormat('EEEE').format(dateSplit);
     final size = MediaQuery.of(context).size;
     return SizedBox(
       width: double.infinity,
@@ -26,12 +27,15 @@ class ComingSoonWidget extends StatelessWidget {
           SizedBox(
             width: 60,
             child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start, 
+              child: Column( 
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Text(
+                  Text(
                     month,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(
                     dateParts[2].toString(),
@@ -40,24 +44,28 @@ class ComingSoonWidget extends StatelessWidget {
                         fontSize: 25,
                         fontWeight: FontWeight.bold),
                   ),
+                  
                 ],
               ),
             ),
           ),
           SizedBox(
             width: size.width - 80,
-            height: 400,
             child: Column(
               children: [
                 Stack(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 150,
-                      child: Image.network(
-                        '${Constants.imagePath}${snapshot.data![index].backdropPath}',
-                        filterQuality: FilterQuality.high,
-                        fit: BoxFit.fill,
+                  children: [ 
+                   ClipRRect(
+                     borderRadius: const BorderRadius.all(Radius.circular(5)), 
+                     child: 
+                       SizedBox(
+                        width: double.infinity,
+                        height: 150,
+                        child: Image.network(
+                          '${Constants.imagePath}${snapshot.data![index].backdropPath}',
+                          filterQuality: FilterQuality.high,
+                          fit: BoxFit.fill, 
+                        ),
                       ),
                     ),
                     Positioned(
@@ -132,14 +140,15 @@ class ComingSoonWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Coming on Thursday", style: titleTextStyle),
-                    Text(
-                      '${snapshot.data![index].overview}',
-                      style: contentTextStyle,
+                    Text("Coming on $day", style: titleTextStyle),
+                    Padding( 
+                      padding: const EdgeInsets.symmetric(vertical: 10), 
+                      child: Text(
+                        '${snapshot.data![index].overview}',
+                        style: contentTextStyle,
+                      ),
                     ),
-                    const Text(
-                        "Rousing • Adventure • Visually Striking • Pirates • Manga",
-                        style: contentTextStyle),
+
                   ],
                 )
               ],

@@ -2,22 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:netflix/core/colors/common_colors.dart';
 
+import '../../../api/api.dart';
+import '../../../models/movie.dart';
 import 'center_images/download_images.dart';
 
-class BodyDownloads extends StatelessWidget {
-  BodyDownloads({super.key});
+class BodyDownloads extends StatefulWidget {
+  const BodyDownloads({super.key}); 
 
-  final List<String> imageList = [
-    "https://www.themoviedb.org/t/p/w220_and_h330_face/eyWICPcxOuTcDDDbTMOZawoOn8d.jpg",
-    "https://www.themoviedb.org/t/p/w300_and_h450_bestv2/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-    "https://www.themoviedb.org/t/p/w220_and_h330_face/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg",  
-  ];
+  @override
+  State<BodyDownloads> createState() => _BodyDownloadsState();
+}
+
+class _BodyDownloadsState extends State<BodyDownloads> {
+
+
+  late Future<List<Movie>> nowPlayingMovies;
+
+  @override
+  void initState() {
+    super.initState();
+    nowPlayingMovies = Api().getnowPlayingMovies();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return ListView( 
+    return ListView(
       children: [
         Row(
           children: [
@@ -57,7 +68,7 @@ class BodyDownloads extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                       fontSize: 13,
                       color: textColor,
-                      fontWeight: FontWeight.bold), 
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               Column(
@@ -66,36 +77,87 @@ class BodyDownloads extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.grey.shade900,  
+                        backgroundColor: Colors.grey.shade900,
                         radius: screenSize.width * 0.34,
                       ),
-                      DownloadImages(
-                        imageList: imageList[0],
-                        screenSizeWidth: screenSize.width * 0.30,
-                        screenSizeHeight: screenSize.height * 0.26,
-                        angle: 20,
-                        margin:
-                            const EdgeInsets.only(left: 200, bottom: 35),
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: nowPlayingMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return DownloadImages(
+                                index: 0,
+                                snapshot: snapshot,
+                                screenSizeWidth: screenSize.width * 0.30,
+                                screenSizeHeight: screenSize.height * 0.20, 
+                                angle: 20,
+                                margin: const EdgeInsets.only(
+                                    left: 200, bottom: 35),
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
                       ),
-                      DownloadImages(
-                        imageList: imageList[1],
-                        screenSizeWidth: screenSize.width * 0.30,
-                        screenSizeHeight: screenSize.height * 0.26,
-                        angle: -20,
-                        margin:
-                            const EdgeInsets.only(right: 200, bottom: 35),
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: nowPlayingMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return DownloadImages(
+                                index: 1,
+                                snapshot: snapshot,
+                                screenSizeWidth: screenSize.width * 0.30,
+                                screenSizeHeight: screenSize.height * 0.20,
+                                angle: -20,
+                                margin: const EdgeInsets.only(
+                                    right: 200, bottom: 35),
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
                       ),
-                      DownloadImages(
-                        imageList: imageList[2],
-                        screenSizeWidth: screenSize.width * 0.40,
-                        screenSizeHeight: screenSize.height * 0.30,
-                        angle: 0,
-                        margin: const EdgeInsets.only(left: 0),
+                      SizedBox(
+                        child: FutureBuilder(
+                          future: nowPlayingMovies,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else if (snapshot.hasData) {
+                              return DownloadImages(
+                                index: 2, 
+                                snapshot: snapshot,
+                                screenSizeWidth: screenSize.width * 0.37, 
+                                screenSizeHeight: screenSize.height * 0.25 ,
+                                angle: 0,
+                                margin: const EdgeInsets.only(left: 0),
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),  
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -118,7 +180,7 @@ class BodyDownloads extends StatelessWidget {
                   SizedBox(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade900, 
+                        backgroundColor: Colors.grey.shade900,
                         shape: const ContinuousRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(15),
@@ -128,7 +190,7 @@ class BodyDownloads extends StatelessWidget {
                       onPressed: () {},
                       child: const Text(
                         'Find More to Download',
-                        style: TextStyle(color:titleColor), 
+                        style: TextStyle(color: titleColor),
                       ),
                     ),
                   ),

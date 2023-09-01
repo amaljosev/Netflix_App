@@ -6,7 +6,7 @@ class Movie {
   final String backdropPath;
   final String originalTitle;
   final String overview;
-  final String releaseDate;
+  final String releaseDate; 
 
   Movie(
       {required this.posterPath,

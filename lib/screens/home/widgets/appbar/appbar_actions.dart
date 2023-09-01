@@ -8,25 +8,19 @@ AppBar appBar(String logo,context) {
         backgroundColor: Colors.black87, 
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration:  BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(
-                      logo,
-                    ),
-                    fit: BoxFit.fill),
-              ),
+            padding: const EdgeInsets.only(left: 15),   
+            child: SizedBox(
+              width: 50, 
+              height: 40, 
+              child: Image.network(logo,fit: BoxFit.cover,),  
             ),
           ),
           const Spacer(),
            IconButton(onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => const ScreenSearch(),),); 
-           }, icon: const Icon(CupertinoIcons.search)), 
+           }, icon: const Icon(CupertinoIcons.search,color: titleColor,)),  
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(right: 20,left: 10),  
             child: Container(
               decoration: const BoxDecoration(
                   color: redCard,
@@ -37,4 +31,4 @@ AppBar appBar(String logo,context) {
           ),
         ],
       );
-  }
+  } 

@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/colors/common_colors.dart';
+import '../../search/screen_search.dart';
 
 class AppbarDownloads extends StatelessWidget {
   const AppbarDownloads({super.key, required this.title});
@@ -19,10 +21,9 @@ final String title;
             ),
           ),
           const Spacer(),
-          const Icon(
-            Icons.search_sharp,
-            color: titleColor,
-          ),
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ScreenSearch(),),); 
+           }, icon: const Icon(CupertinoIcons.search,color: titleColor,)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),  
             child: Container(

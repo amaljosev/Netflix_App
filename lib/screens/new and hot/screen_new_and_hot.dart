@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:netflix/models/tv.dart';
 import 'package:netflix/screens/new%20and%20hot/widgets/comingsoon_tab.dart';
 import 'package:netflix/screens/new%20and%20hot/widgets/everyones_watching_widget.dart';
 import '../../api/api.dart';
 import '../../core/colors/common_colors.dart';
 import '../../models/movie.dart';
+import '../search/screen_search.dart';
 
 const newAndHotTempImage =
     "https://i.ytimg.com/vi/nfe7SHu4kcE/maxresdefault.jpg";
@@ -18,22 +21,24 @@ class ScreenNewAndHot extends StatefulWidget {
 }
 
 late Future<List<Movie>> trendingMovies;
+late Future<List<TvSeries>> popularSeries;
 
 class _ScreenNewAndHotState extends State<ScreenNewAndHot> {
   @override
   void initState() {
-    super.initState(); 
+    super.initState();
     trendingMovies = Api().getTrendingMovies();
+    popularSeries = Api().getpopularSeries();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return SafeArea(
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
             appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(80),
+              preferredSize: const Size.fromHeight(90),
               child: AppBar(
                 backgroundColor: scaffoldColor,
                 title: const Text(
@@ -45,15 +50,24 @@ class _ScreenNewAndHotState extends State<ScreenNewAndHot> {
                     Icons.add_alert_outlined,
                     color: titleColor,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Icon(
-                      Icons.search_sharp,
-                      color: titleColor,
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),  
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ScreenSearch(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          CupertinoIcons.search,
+                          color: titleColor,
+                        )),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 20),
+                    padding: const EdgeInsets.only(right: 20), 
                     child: Container(
                       decoration: const BoxDecoration(
                           color: redCard,
@@ -88,41 +102,65 @@ class _ScreenNewAndHotState extends State<ScreenNewAndHot> {
             ),
             body: TabBarView(children: [
               SizedBox(
-                        child: FutureBuilder(
-                          future: trendingMovies,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return Center(
-                                child: Text(snapshot.error.toString()),
-                              );
-                            } else if (snapshot.hasData) {
-                              return  buildTabbarViewOne(snapshot); 
-                            } else {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-             
-              buildTabbarViewTwo(context),
+                child: FutureBuilder(
+                  future: trendingMovies,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    } else if (snapshot.hasData) {
+                      return buildTabbarViewOne(snapshot);
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ),
+              SizedBox(
+                child: FutureBuilder(
+                  future: popularSeries,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    } else if (snapshot.hasData) {
+                      return buildTabbarViewTwo(context, snapshot);
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ),
             ])),
       ),
     );
   }
 
-  Widget buildTabbarViewOne(AsyncSnapshot<List<Movie>> snapshot) { 
-    return ListView.builder(
-      itemCount: snapshot.data!.length, 
-      itemBuilder: (context, index) =>  ComingSoonWidget(snapshot: snapshot,index: index), 
+  Widget buildTabbarViewOne(AsyncSnapshot<List<Movie>> snapshot) {
+    return ListView.separated(
+      itemBuilder: (context, index) =>
+          ComingSoonWidget(snapshot: snapshot, index: index),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: 20,
+      ),
+      itemCount: snapshot.data!.length,
     );
   }
 
-  Widget buildTabbarViewTwo(context) {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) => const EveryonesWatchingWidget(),
+  Widget buildTabbarViewTwo(context, AsyncSnapshot<List<TvSeries>> snapshot) {
+    return ListView.separated(
+      itemBuilder: (context, index) =>
+          EveryonesWatchingWidget(index: index, snapshot: snapshot),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: 20,
+      ),
+      itemCount: snapshot.data!.length,
     );
   }
 }
