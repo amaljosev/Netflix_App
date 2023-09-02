@@ -4,6 +4,8 @@ import 'package:netflix/models/tv.dart';
 import '../models/movie.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/search.dart';
+
 class Api {
   static const trendingUrl =
       'https://api.themoviedb.org/3/trending/movie/day?api_key=${Constants.apiKey}';
@@ -92,15 +94,18 @@ class Api {
 
   
 
-  Future<List<Movie>> search(value) async {
-    final  searchsUrl = 
-      'https://api.themoviedb.org/3/search/movie?query=$value&include_adult=false&language=en-US&page=1&api_key=${Constants.apiKey}';
-    final response = await http.get(Uri.parse(searchsUrl));
-    if (response.statusCode == 200) {
-      final decodedData = json.decode(response.body)['results'] as List;
-      return decodedData.map((movie) => Movie.fromJson(movie)).toList(); 
-    } else {
-      throw Exception('Something Happend');
-    }
+Future<List<SearchMovie>> search(value) async { 
+  final searchsUrl = 'https://api.themoviedb.org/3/search/movie?query=$value&include_adult=false&language=en-US&api_key=${Constants.apiKey}';
+
+  final response = await http.get(Uri.parse(searchsUrl));
+  if (response.statusCode == 200) {
+    final decodedData = json.decode(response.body)['results'] as List;
+    return decodedData
+        .map((movie) => SearchMovie.fromJson(movie))
+        .where((movie) => movie.posterPath != null && movie.posterPath.isNotEmpty)
+        .toList();
+  } else {
+    throw Exception('Something Happened');
   }
+}
 }

@@ -17,7 +17,7 @@ class ScreenSearch extends StatefulWidget {
 
 class _ScreenSearchState extends State<ScreenSearch> {
   late Future<List<Movie>> popularMovies;
-  Future<List<Movie>> searchResults = Future.value([]);
+
   @override
   void initState() {
     super.initState();
@@ -25,17 +25,6 @@ class _ScreenSearchState extends State<ScreenSearch> {
   }
 
   String searchContent = '';
-
-  void _performSearch(String value) async {
-    try {
-      final results = await Api().search(value);
-      setState(() {
-        searchResults = Future.value(results);
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +67,6 @@ class _ScreenSearchState extends State<ScreenSearch> {
                   setState(() {
                     searchContent = value;
                   });
-                  if (value.isNotEmpty) {
-                    _performSearch(value);
-                  }
                 },
               ),
               Padding(
@@ -96,8 +82,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
               Expanded(
                 child: SizedBox(
                   child: FutureBuilder(
-                    future:
-                        searchContent.isEmpty ? popularMovies : searchResults,
+                    future: popularMovies,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(
@@ -109,7 +94,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                 snapshot: snapshot,
                               )
                             : SearchResultWidget(
-                                snapshot: snapshot,
+                                searchMovies: Api().search(searchContent), 
                               );
                       } else {
                         return const Center(

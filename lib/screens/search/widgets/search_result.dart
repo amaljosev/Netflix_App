@@ -1,34 +1,47 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import '../../../constants/constants.dart';
-
+import '../../../models/movie.dart';
+import '../../../models/search.dart';
 
 class SearchResultWidget extends StatelessWidget {
-  const SearchResultWidget({super.key, required this.snapshot});
+  const SearchResultWidget({
+    super.key,
+    required this.searchMovies,
+  });
 
-  final AsyncSnapshot snapshot;
+  final Future<List<SearchMovie>> searchMovies;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        
         Expanded(
-          child: GridView.count(
-            padding: const EdgeInsets.all(10),
-            shrinkWrap: true,
-            crossAxisCount: 3,
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-            childAspectRatio: 1 / 1.4,
-            children: List.generate(
-              20,
-              (index) => MainCard(
-                snapshot: snapshot,
-                index: index,
-              ),
-            ),
-          ),
-        ),
+            child: FutureBuilder(
+          future: searchMovies,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error : ${snapshot.error}');
+            } else if (!snapshot.hasData) {
+              return const Text('No data available');
+            } else if (snapshot.hasData) {
+              return GridView.count(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 9,
+                  crossAxisSpacing: 9,
+                  childAspectRatio: 1 / 1.4,
+                  shrinkWrap: true,
+                  children: List.generate(snapshot.data!.length, (index) {
+                    return MainCard(snapshot: snapshot, index: index);
+                  })); 
+            } else {
+              return const SizedBox.shrink(); 
+            }
+          },
+        )),
       ],
     );
   }
@@ -50,9 +63,7 @@ class MainCard extends StatelessWidget {
         ),
       );
     } else {
-     
       return const SizedBox();
     }
   }
 }
-
