@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/font.dart';
+import '../../../../../constants/font.dart';
 import 'numbercard_widget.dart';
 
 class NumberTitileCard extends StatelessWidget {

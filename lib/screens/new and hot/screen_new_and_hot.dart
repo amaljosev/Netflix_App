@@ -4,7 +4,7 @@ import 'package:netflix/models/tv.dart';
 import 'package:netflix/screens/new%20and%20hot/widgets/comingsoon_tab.dart';
 import 'package:netflix/screens/new%20and%20hot/widgets/everyones_watching_widget.dart';
 import '../../api/api.dart';
-import '../../core/colors/common_colors.dart';
+import '../../constants/colors/common_colors.dart';
 import '../../models/movie.dart';
 import '../search/screen_search.dart';
 

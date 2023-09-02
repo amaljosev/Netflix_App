@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:netflix/core/font.dart';
+import '../../../constants/colors/common_colors.dart';
 import '../../../constants/constants.dart';
-import '../../../core/colors/common_colors.dart';
+import '../../../constants/font.dart';
+
 
 class SearchTile extends StatelessWidget {
   const SearchTile({

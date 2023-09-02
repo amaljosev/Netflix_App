@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netflix/constants/constants.dart';
-import '../../../../../core/colors/common_colors.dart';
+import '../../../../../constants/colors/common_colors.dart';
+
 
 class MainTileCard extends StatelessWidget {
   const MainTileCard({

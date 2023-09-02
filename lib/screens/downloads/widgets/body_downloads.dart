@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:netflix/core/colors/common_colors.dart';
 
 import '../../../api/api.dart';
+import '../../../constants/colors/common_colors.dart';
 import '../../../models/movie.dart';
 import 'center_images/download_images.dart';
 

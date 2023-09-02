@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../constants/colors/common_colors.dart';
 import '../../../constants/constants.dart';
-import '../../../core/colors/common_colors.dart';
-import '../../../core/font.dart';
+import '../../../constants/font.dart';
+
 
 class ComingSoonWidget extends StatelessWidget {
   const ComingSoonWidget({

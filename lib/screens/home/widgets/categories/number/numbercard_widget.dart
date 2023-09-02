@@ -1,7 +1,9 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix/constants/constants.dart';
-import 'package:netflix/core/colors/common_colors.dart';
+
+import '../../../../../constants/colors/common_colors.dart';
+
 
 class NumberCard extends StatelessWidget {
   const NumberCard({

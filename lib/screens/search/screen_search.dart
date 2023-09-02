@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:netflix/screens/search/widgets/search_result.dart';
 import 'package:netflix/screens/search/widgets/search_tile.dart';
 import '../../api/api.dart';
-import '../../core/colors/common_colors.dart';
+import '../../constants/colors/common_colors.dart';
 import '../../models/movie.dart';
 
 TextEditingController searchController = TextEditingController();
@@ -22,6 +22,12 @@ class _ScreenSearchState extends State<ScreenSearch> {
   void initState() {
     super.initState();
     popularMovies = Api().getpopularMovies();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.text = '';
   }
 
   String searchContent = '';
@@ -94,7 +100,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                 snapshot: snapshot,
                               )
                             : SearchResultWidget(
-                                searchMovies: Api().search(searchContent), 
+                                searchMovies: Api().search(searchContent),
                               );
                       } else {
                         return const Center(

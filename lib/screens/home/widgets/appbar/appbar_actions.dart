@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix/screens/search/screen_search.dart';
-import '../../../../core/colors/common_colors.dart';
+import '../../../../constants/colors/common_colors.dart';
 
 AppBar appBar(String logo,context) {
     return AppBar(

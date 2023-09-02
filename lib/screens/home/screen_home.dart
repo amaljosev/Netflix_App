@@ -8,7 +8,7 @@ import 'package:netflix/screens/home/widgets/categories/movie/maintile_widget.da
 import 'package:netflix/screens/home/widgets/categories/number/numbertitlecard.dart';
 import 'package:netflix/screens/home/widgets/categories/series/maintile_series.dart';
 import 'package:netflix/screens/home/widgets/futuremethod.dart';
-import '../../core/colors/common_colors.dart';
+import '../../constants/colors/common_colors.dart';
 import '../../models/movie.dart';
 import 'widgets/appbar/appbar_actions.dart';
 

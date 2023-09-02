@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../constants/colors/common_colors.dart';
 import '../../../constants/constants.dart';
-import '../../../core/colors/common_colors.dart';
-import '../../../core/font.dart';
+import '../../../constants/font.dart';
 
 class EveryonesWatchingWidget extends StatelessWidget {
   const EveryonesWatchingWidget({
@@ -84,7 +84,7 @@ class EveryonesWatchingWidget extends StatelessWidget {
                   SizedBox(
                     width: 180,
                     height: 60,
-                    child: Padding( 
+                    child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         '${snapshot.data![index].title}',
@@ -92,7 +92,7 @@ class EveryonesWatchingWidget extends StatelessWidget {
                             color: titleColor,
                             fontSize: 20,
                             fontWeight: FontWeight.w400),
-                            maxLines: 1,    
+                        maxLines: 1,
                       ),
                     ),
                   ),

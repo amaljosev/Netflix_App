@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'core/colors/common_colors.dart';
+import 'constants/colors/common_colors.dart';
 import 'screens/screen_main.dart';
 
 void main() {

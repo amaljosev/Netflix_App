@@ -102,6 +102,7 @@ Future<List<SearchMovie>> search(value) async {
     final decodedData = json.decode(response.body)['results'] as List;
     return decodedData
         .map((movie) => SearchMovie.fromJson(movie))
+        // ignore: unnecessary_null_comparison
         .where((movie) => movie.posterPath != null && movie.posterPath.isNotEmpty)
         .toList();
   } else {

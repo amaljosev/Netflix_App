@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../../core/colors/common_colors.dart';
+import '../../../constants/colors/common_colors.dart';
 import '../../search/screen_search.dart';
 
 class AppbarDownloads extends StatelessWidget {
